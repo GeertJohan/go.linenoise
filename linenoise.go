@@ -1,5 +1,11 @@
 package linenoise
 
+// +linux
+
+// #include <stdlib.h>
+// #include "linenoise.h"
+import "C"
+
 import (
 	"fmt"
 )
