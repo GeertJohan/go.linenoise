@@ -9,4 +9,6 @@ go.linenoise is a [go](http://golang.org) package wrapping the [linenoise](https
 [godoc.org/github.com/GeertJohan/go.linenoise](http://godoc.org/github.com/GeertJohan/go.linenoise)
 
 ### License
-All code in this repository is licensed under a BSD license. Unless otherwise noted in a file: see [LICENSE](LICENSE).
+All code in this repository is licensed under a BSD license.
+This project uses C code from [antirez/linenoise](https://github.com/antirez/linenoise). License for that code is included in the files `linenoise.c` and `linenoise.h`.
+For other files please read the [LICENSE](LICENSE) file.
