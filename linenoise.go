@@ -35,9 +35,9 @@ func AddHistory(line string) error {
 	return nil
 }
 
-// SetHistoryMaxLen changes the maximum length of history
+// SetHistoryCapacity changes the maximum length of history
 // int linenoiseHistorySetMaxLen(int len);
-func SetHistoryMaxLen(capacity int) error { // TODO: maybe rename to SetHistoryCapacity
+func SetHistoryCapacity(capacity int) error {
 	res := C.linenoiseHistorySetMaxLen(C.int(capacity))
 	if res != 1 {
 		return errors.New("Could not set history max len.")
