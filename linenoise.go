@@ -12,8 +12,7 @@ import (
 )
 
 // Line displays given string and returns line from user input.
-// char *linenoise(const char *prompt);
-func Line(prompt string) string {
+func Line(prompt string) string { // char *linenoise(const char *prompt);
 	promptCString := C.CString(prompt)
 	resultCString := C.linenoise(promptCString)
 	C.free(unsafe.Pointer(promptCString))
@@ -24,8 +23,7 @@ func Line(prompt string) string {
 }
 
 // AddHistory adds a line to history
-// int linenoiseHistoryAdd(const char *line);
-func AddHistory(line string) error {
+func AddHistory(line string) error { // int linenoiseHistoryAdd(const char *line);
 	lineCString := C.CString(line)
 	res := C.linenoiseHistoryAdd(lineCString)
 	C.free(unsafe.Pointer(lineCString))
@@ -36,8 +34,7 @@ func AddHistory(line string) error {
 }
 
 // SetHistoryCapacity changes the maximum length of history
-// int linenoiseHistorySetMaxLen(int len);
-func SetHistoryCapacity(capacity int) error {
+func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(int len);
 	res := C.linenoiseHistorySetMaxLen(C.int(capacity))
 	if res != 1 {
 		return errors.New("Could not set history max len.")
@@ -46,8 +43,7 @@ func SetHistoryCapacity(capacity int) error {
 }
 
 // SaveHistory saves from file with given filename.
-// int linenoiseHistorySave(char *filename);
-func SaveHistory(filename string) error {
+func SaveHistory(filename string) error { // int linenoiseHistorySave(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistorySave(filenameCString)
 	C.free(unsafe.Pointer(filenameCString))
@@ -58,8 +54,7 @@ func SaveHistory(filename string) error {
 }
 
 // LoadHistory loads from file with given filename.
-// int linenoiseHistoryLoad(char *filename);
-func LoadHistory(filename string) error {
+func LoadHistory(filename string) error { // int linenoiseHistoryLoad(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistoryLoad(filenameCString)
 	C.free(unsafe.Pointer(filenameCString))
@@ -70,14 +65,12 @@ func LoadHistory(filename string) error {
 }
 
 // Clear clears the screen.
-// void linenoiseClearScreen(void);
-func Clear() {
+func Clear() { // void linenoiseClearScreen(void);
 	C.linenoiseClearScreen()
 }
 
 // SetMultiline sets linenoise to multiline or single line
-// void linenoiseSetMultiLine(int ml);
-func SetMultiline(ml bool) {
+func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
 	if ml {
 		C.linenoiseSetMultiLine(1)
 	} else {
