@@ -88,11 +88,12 @@ func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
 // CompletionHandler provides possible completions for given input
 type CompletionHandler func(input string) []string
 
-func defaultCompletionHandler(input string) []string {
+// DefaultCompletionHandler simply returns an empty slice.
+var DefaultCompletionHandler = func(input string) []string {
 	return nil
 }
 
-var complHandler = defaultCompletionHandler
+var complHandler = DefaultCompletionHandler
 
 // SetCompletionHandler sets the CompletionHandler to be used for completion
 func SetCompletionHandler(c CompletionHandler) {
