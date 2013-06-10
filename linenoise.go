@@ -1,6 +1,6 @@
 package linenoise
 
-// +linux
+// -windows
 
 // #include <stdlib.h>
 // #include "linenoise.h"
