@@ -4,12 +4,18 @@ package linenoise
 
 // #include <stdlib.h>
 // #include "linenoise.h"
+// #include "linenoiseCompletionCallbackHook.h"
 import "C"
 
 import (
 	"errors"
+	"fmt"
 	"unsafe"
 )
+
+func init() {
+	C.linenoiseSetupCompletionCallbackHook()
+}
 
 // Line displays given string and returns line from user input.
 func Line(prompt string) string { // char *linenoise(const char *prompt);
@@ -79,10 +85,20 @@ func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
 	}
 }
 
-// typedef struct linenoiseCompletions {
-//   size_t len;
-//   char **cvec;
-// } linenoiseCompletions;
+// Completions defines a list of completions for linenoise. It implements Completer
+type Completions struct {
+	// typedef struct linenoiseCompletions {
+	//   size_t len;
+	//   char **cvec;
+	// } linenoiseCompletions;
+	compl *C.linenoiseCompletions
+}
+
+//export linenoiseGoCompletionCallbackHook
+func linenoiseGoCompletionCallbackHook(input *C.char, compl *C.linenoiseCompletions) {
+	fmt.Println("hook was called")
+	//++ call actual handler (interface, closure, global var)
+}
 
 // typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
 // void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
