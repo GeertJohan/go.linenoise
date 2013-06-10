@@ -33,7 +33,7 @@ func AddHistory(line string) error { // int linenoiseHistoryAdd(const char *line
 	return nil
 }
 
-// SetHistoryCapacity changes the maximum length of history
+// SetHistoryCapacity changes the maximum length of history. Returns non-nil error on fail.
 func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(int len);
 	res := C.linenoiseHistorySetMaxLen(C.int(capacity))
 	if res != 1 {
@@ -42,7 +42,7 @@ func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(i
 	return nil
 }
 
-// SaveHistory saves from file with given filename, returns non-nil error on fail.
+// SaveHistory saves from file with given filename. Returns non-nil error on fail.
 func SaveHistory(filename string) error { // int linenoiseHistorySave(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistorySave(filenameCString)
@@ -53,7 +53,7 @@ func SaveHistory(filename string) error { // int linenoiseHistorySave(char *file
 	return nil
 }
 
-// LoadHistory loads from file with given filename, returns non-nil error on fail.
+// LoadHistory loads from file with given filename. Returns non-nil error on fail.
 func LoadHistory(filename string) error { // int linenoiseHistoryLoad(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistoryLoad(filenameCString)
