@@ -36,7 +36,10 @@ func main() {
 			if len(str) < 12 {
 				fmt.Println("No argument given.")
 			}
-			linenoise.AddHistory(str[11:])
+			err := linenoise.AddHistory(str[11:])
+			if err != nil {
+				fmt.Printf("Error: %s\n", err)
+			}
 		case "quit":
 			fmt.Println("Thanks for running the go.linenoise example.")
 			fmt.Println("")
