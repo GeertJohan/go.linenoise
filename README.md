@@ -4,7 +4,8 @@ go.linenoise is a [go](http://golang.org) package wrapping the [linenoise](https
 
 
 ### Documentation
-[godoc.org/github.com/GeertJohan/go.linenoise](http://godoc.org/github.com/GeertJohan/go.linenoise)
+Documentation can be found at [godoc.org/github.com/GeertJohan/go.linenoise](http://godoc.org/github.com/GeertJohan/go.linenoise).
+An example is located in the folder [examplenoise](examplenoise).
 
 ### Development
 **This package is currently in development and should not be used in production. Everything is subject to change. Do not depend on package outline!**
