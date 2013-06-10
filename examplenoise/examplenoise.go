@@ -34,6 +34,24 @@ func main() {
 		case "singleline":
 			fmt.Println("Setting linenoise to singleline")
 			linenoise.SetMultiline(false)
+		case "save":
+			if len(fields) != 2 {
+				fmt.Println("Error. Expecting 'save <filename>'.")
+				continue
+			}
+			err := linenoise.SaveHistory(fields[1])
+			if err != nil {
+				fmt.Printf("Error on save: %s\n", err)
+			}
+		case "load":
+			if len(fields) != 2 {
+				fmt.Println("Error. Expecting 'load <filename>'.")
+				continue
+			}
+			err := linenoise.LoadHistory(fields[1])
+			if err != nil {
+				fmt.Printf("Error on load: %s\n", err)
+			}
 		case "addHistory":
 			if len(str) < 12 {
 				fmt.Println("No argument given.")

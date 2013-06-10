@@ -51,7 +51,7 @@ func SaveHistory(filename string) error {
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistorySave(filenameCString)
 	C.free(unsafe.Pointer(filenameCString))
-	if res != 1 {
+	if res != 0 {
 		return errors.New("Could not save history to file.")
 	}
 	return nil
@@ -63,7 +63,7 @@ func LoadHistory(filename string) error {
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistoryLoad(filenameCString)
 	C.free(unsafe.Pointer(filenameCString))
-	if res != 1 {
+	if res != 0 {
 		return errors.New("Could not load history from file.")
 	}
 	return nil
