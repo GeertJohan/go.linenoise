@@ -85,19 +85,38 @@ func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
 	}
 }
 
-// Completions defines a list of completions for linenoise. It implements Completer
-type Completions struct {
-	// typedef struct linenoiseCompletions {
-	//   size_t len;
-	//   char **cvec;
-	// } linenoiseCompletions;
-	compl *C.linenoiseCompletions
+// CompletionHandler provides possible completions for given input
+type CompletionHandler func(input string) []string
+
+func defaultCompletionHandler(input string) []string {
+	return nil
 }
 
+var complHandler = defaultCompletionHandler
+
+// SetCompletionHandler sets the CompletionHandler to be used for completion
+func SetCompletionHandler(c CompletionHandler) {
+	complHandler = c
+}
+
+// typedef struct linenoiseCompletions {
+//   size_t len;
+//   char **cvec;
+// } linenoiseCompletions;
+
 //export linenoiseGoCompletionCallbackHook
-func linenoiseGoCompletionCallbackHook(input *C.char, compl *C.linenoiseCompletions) {
-	fmt.Println("hook was called")
-	//++ call actual handler (interface, closure, global var)
+func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCompletions) {
+	completionsSlice := complHandler(C.GoString(input))
+	fmt.Println(completionsSlice)
+	completionsLen := len(completionsSlice)
+	completions.len = C.size_t(completionsLen)
+
+	// Not working:
+	// Needs to fill cvec with ary of *char's
+	// completions.cvec = [completionsLen]*C.char{}
+	// for i, str := range completionsSlice {
+	// 	completions.cvec[i] = C.CString(str)
+	// }
 }
 
 // typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
