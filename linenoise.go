@@ -22,7 +22,7 @@ func Line(prompt string) string { // char *linenoise(const char *prompt);
 	return result
 }
 
-// AddHistory adds a line to history
+// AddHistory adds a line to history. Returns non-nil error on fail.
 func AddHistory(line string) error { // int linenoiseHistoryAdd(const char *line);
 	lineCString := C.CString(line)
 	res := C.linenoiseHistoryAdd(lineCString)
