@@ -16,5 +16,5 @@ TODO:
 
 ### License
 All code in this repository is licensed under a BSD license.
-This project uses C code from [antirez/linenoise](https://github.com/antirez/linenoise). License for that code is included in the files `linenoise.c` and `linenoise.h`.
-For other files please read the [LICENSE](LICENSE) file.
+This project wraps [linenoise](https://github.com/antirez/linenoise) which is written by Salvatore Sanfilippo and Pieter Noordhuis. The license for linenoise is included in the files `linenoise.c` and `linenoise.h`.
+For all other files please read the [LICENSE](LICENSE) file.
