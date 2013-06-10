@@ -42,7 +42,7 @@ func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(i
 	return nil
 }
 
-// SaveHistory saves from file with given filename.
+// SaveHistory saves from file with given filename, returns non-nil error on fail.
 func SaveHistory(filename string) error { // int linenoiseHistorySave(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistorySave(filenameCString)
@@ -53,7 +53,7 @@ func SaveHistory(filename string) error { // int linenoiseHistorySave(char *file
 	return nil
 }
 
-// LoadHistory loads from file with given filename.
+// LoadHistory loads from file with given filename, returns non-nil error on fail.
 func LoadHistory(filename string) error { // int linenoiseHistoryLoad(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistoryLoad(filenameCString)
@@ -69,7 +69,8 @@ func Clear() { // void linenoiseClearScreen(void);
 	C.linenoiseClearScreen()
 }
 
-// SetMultiline sets linenoise to multiline or single line
+// SetMultiline sets linenoise to multiline or single line.
+// In multiline mode the user input will be wrapped to a new line when the length exceeds the amount of available rows in the terminal.
 func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
 	if ml {
 		C.linenoiseSetMultiLine(1)
