@@ -26,6 +26,8 @@ func main() {
 			writeHelp()
 		case "echo":
 			fmt.Printf("echo: %s\n\n", str[5:])
+		case "clear":
+			linenoise.Clear()
 		case "multiline":
 			fmt.Println("Setting linenoise to multiline")
 			linenoise.SetMultiline(true)
@@ -53,6 +55,7 @@ func main() {
 func writeHelp() {
 	fmt.Println("help              write this message")
 	fmt.Println("echo ...          echo the arguments")
+	fmt.Println("clear             clear the screen")
 	fmt.Println("multiline         set linenoise to multiline")
 	fmt.Println("singleline        set linenoise to singleline")
 	fmt.Println("addHistory ...    add arguments to linenoise history")
