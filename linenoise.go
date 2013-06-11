@@ -9,7 +9,6 @@ import "C"
 
 import (
 	"errors"
-	"fmt"
 	"unsafe"
 )
 
@@ -111,15 +110,17 @@ func SetCompletionHandler(c CompletionHandler) {
 //export linenoiseGoCompletionCallbackHook
 func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCompletions) {
 	completionsSlice := complHandler(C.GoString(input))
-	fmt.Println(completionsSlice)
 
 	completionsLen := len(completionsSlice)
 	completions.len = C.size_t(completionsLen)
 
-	cvec := make([]*C.char, completionsLen)
+	if completionsLen > 0 {
+		cvec := C.malloc(C.size_t(int(unsafe.Sizeof(*(**C.char)(nil))) * completionsLen))
+		cvecSlice := (*(*[999999]*C.char)(cvec))[:completionsLen]
 
-	for _, str := range completionsSlice {
-		cvec = append(cvec, C.CString(str))
+		for i, str := range completionsSlice {
+			cvecSlice[i] = C.CString(str)
+		}
+		completions.cvec = (**C.char)(cvec)
 	}
-	completions.cvec = &cvec[0] // TODO: probably a problem for GC. Try to run GC before returning this function.
 }
