@@ -34,6 +34,21 @@ func main() {
 		case "singleline":
 			fmt.Println("Setting linenoise to singleline")
 			linenoise.SetMultiline(false)
+		case "complete":
+			fmt.Println("Setting arguments as completion values for linenoise.")
+			fmt.Printf("%d arguments: %s\n", len(fields)-1, fields[1:])
+			completionHandler := func(in string) []string {
+				return fields[1:]
+			}
+			linenoise.SetCompletionHandler(completionHandler)
+		case "addHistory":
+			if len(str) < 12 {
+				fmt.Println("No argument given.")
+			}
+			err := linenoise.AddHistory(str[11:])
+			if err != nil {
+				fmt.Printf("Error: %s\n", err)
+			}
 		case "save":
 			if len(fields) != 2 {
 				fmt.Println("Error. Expecting 'save <filename>'.")
@@ -52,14 +67,6 @@ func main() {
 			if err != nil {
 				fmt.Printf("Error on load: %s\n", err)
 			}
-		case "addHistory":
-			if len(str) < 12 {
-				fmt.Println("No argument given.")
-			}
-			err := linenoise.AddHistory(str[11:])
-			if err != nil {
-				fmt.Printf("Error: %s\n", err)
-			}
 		case "quit":
 			fmt.Println("Thanks for running the go.linenoise example.")
 			fmt.Println("")
@@ -76,7 +83,10 @@ func writeHelp() {
 	fmt.Println("clear             clear the screen")
 	fmt.Println("multiline         set linenoise to multiline")
 	fmt.Println("singleline        set linenoise to singleline")
+	fmt.Println("complete ...      set arguments as completion values")
 	fmt.Println("addHistory ...    add arguments to linenoise history")
+	fmt.Println("save <filename>   save the history to file")
+	fmt.Println("load <filename>   load the history from file")
 	fmt.Println("quit              stop the program")
 	fmt.Println("")
 	fmt.Println("Use the arrow up and down keys to walk through history.")

@@ -90,7 +90,7 @@ type CompletionHandler func(input string) []string
 
 // DefaultCompletionHandler simply returns an empty slice.
 var DefaultCompletionHandler = func(input string) []string {
-	return nil
+	return make([]string, 0)
 }
 
 var complHandler = DefaultCompletionHandler
@@ -104,22 +104,22 @@ func SetCompletionHandler(c CompletionHandler) {
 //   size_t len;
 //   char **cvec;
 // } linenoiseCompletions;
+// typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
+// void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
+// void linenoiseAddCompletion(linenoiseCompletions *, char *);
 
 //export linenoiseGoCompletionCallbackHook
 func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCompletions) {
 	completionsSlice := complHandler(C.GoString(input))
 	fmt.Println(completionsSlice)
+
 	completionsLen := len(completionsSlice)
 	completions.len = C.size_t(completionsLen)
 
-	// Not working:
-	// Needs to fill cvec with ary of *char's
-	// completions.cvec = [completionsLen]*C.char{}
-	// for i, str := range completionsSlice {
-	// 	completions.cvec[i] = C.CString(str)
-	// }
-}
+	cvec := make([]*C.char, completionsLen)
 
-// typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
-// void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
-// void linenoiseAddCompletion(linenoiseCompletions *, char *);
+	for _, str := range completionsSlice {
+		cvec = append(cvec, C.CString(str))
+	}
+	completions.cvec = &cvec[0] // TODO: probably a problem for GC. Try to run GC before returning this function.
+}
