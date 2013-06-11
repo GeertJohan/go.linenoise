@@ -4,12 +4,17 @@ package linenoise
 
 // #include <stdlib.h>
 // #include "linenoise.h"
+// #include "linenoiseCompletionCallbackHook.h"
 import "C"
 
 import (
 	"errors"
 	"unsafe"
 )
+
+func init() {
+	C.linenoiseSetupCompletionCallbackHook()
+}
 
 // Line displays given string and returns line from user input.
 func Line(prompt string) string { // char *linenoise(const char *prompt);
@@ -79,11 +84,43 @@ func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
 	}
 }
 
+// CompletionHandler provides possible completions for given input
+type CompletionHandler func(input string) []string
+
+// DefaultCompletionHandler simply returns an empty slice.
+var DefaultCompletionHandler = func(input string) []string {
+	return make([]string, 0)
+}
+
+var complHandler = DefaultCompletionHandler
+
+// SetCompletionHandler sets the CompletionHandler to be used for completion
+func SetCompletionHandler(c CompletionHandler) {
+	complHandler = c
+}
+
 // typedef struct linenoiseCompletions {
 //   size_t len;
 //   char **cvec;
 // } linenoiseCompletions;
-
 // typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
 // void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
 // void linenoiseAddCompletion(linenoiseCompletions *, char *);
+
+//export linenoiseGoCompletionCallbackHook
+func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCompletions) {
+	completionsSlice := complHandler(C.GoString(input))
+
+	completionsLen := len(completionsSlice)
+	completions.len = C.size_t(completionsLen)
+
+	if completionsLen > 0 {
+		cvec := C.malloc(C.size_t(int(unsafe.Sizeof(*(**C.char)(nil))) * completionsLen))
+		cvecSlice := (*(*[999999]*C.char)(cvec))[:completionsLen]
+
+		for i, str := range completionsSlice {
+			cvecSlice[i] = C.CString(str)
+		}
+		completions.cvec = (**C.char)(cvec)
+	}
+}
