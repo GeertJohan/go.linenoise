@@ -12,19 +12,26 @@ import (
 	"unsafe"
 )
 
+// KillSignalError is returned returned by Line() when a user quits from prompt.
+// This occurs when the user enters ctrl+C or ctrl+D.
+var KillSignalError = errors.New("prompt was quited with a killsignal")
+
 func init() {
 	C.linenoiseSetupCompletionCallbackHook()
 }
 
 // Line displays given string and returns line from user input.
-func Line(prompt string) string { // char *linenoise(const char *prompt);
+func Line(prompt string) (string, error) { // char *linenoise(const char *prompt);
 	promptCString := C.CString(prompt)
 	resultCString := C.linenoise(promptCString)
+	if resultCString == nil {
+		return "", KillSignalError
+	}
 	C.free(unsafe.Pointer(promptCString))
 
 	result := C.GoString(resultCString)
 	C.free(unsafe.Pointer(resultCString)) // TODO: is this required?
-	return result
+	return result, nil
 }
 
 // AddHistory adds a line to history. Returns non-nil error on fail.
