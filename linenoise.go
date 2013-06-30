@@ -24,13 +24,15 @@ func init() {
 func Line(prompt string) (string, error) { // char *linenoise(const char *prompt);
 	promptCString := C.CString(prompt)
 	resultCString := C.linenoise(promptCString)
+	C.free(unsafe.Pointer(promptCString))
+	defer C.free(unsafe.Pointer(resultCString))
+
 	if resultCString == nil {
 		return "", KillSignalError
 	}
-	C.free(unsafe.Pointer(promptCString))
 
 	result := C.GoString(resultCString)
-	C.free(unsafe.Pointer(resultCString)) // TODO: is this required?
+
 	return result, nil
 }
 
