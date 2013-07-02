@@ -11,7 +11,14 @@ func main() {
 	fmt.Println("Welcome to go.linenoise example.")
 	writeHelp()
 	for {
-		str := linenoise.Line("prompt> ")
+		str, err := linenoise.Line("prompt> ")
+		if err != nil {
+			if err == linenoise.KillSignalError {
+				quit()
+			}
+			fmt.Println("Unexpected error: %s", err)
+			quit()
+		}
 		fields := strings.Fields(str)
 
 		// check if there is any valid input at all
@@ -68,13 +75,17 @@ func main() {
 				fmt.Printf("Error on load: %s\n", err)
 			}
 		case "quit":
-			fmt.Println("Thanks for running the go.linenoise example.")
-			fmt.Println("")
-			os.Exit(0)
+			quit()
 		default:
 			writeUnrecognized()
 		}
 	}
+}
+
+func quit() {
+	fmt.Println("Thanks for running the go.linenoise example.")
+	fmt.Println("")
+	os.Exit(0)
 }
 
 func writeHelp() {
