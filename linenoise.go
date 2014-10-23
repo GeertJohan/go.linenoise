@@ -134,11 +134,9 @@ func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCo
 	}
 }
 
-// void linenoisePrintKeyCodes(void);
-
 // PrintKeyCodes puts linenoise in key codes debugging mode.
 // Press keys to see scan codes. Type 'quit' at any time to exit.
 // PrintKeyCodes blocks until user enters 'quit'.
-func PrintKeyCodes() {
+func PrintKeyCodes() { // void linenoisePrintKeyCodes(void);
 	C.linenoisePrintKeyCodes()
 }
