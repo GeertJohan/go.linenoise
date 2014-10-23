@@ -48,6 +48,8 @@ func main() {
 				return fields[1:]
 			}
 			linenoise.SetCompletionHandler(completionHandler)
+		case "printKeyCodes":
+			linenoise.PrintKeyCodes()
 		case "addHistory":
 			if len(str) < 12 {
 				fmt.Println("No argument given.")
