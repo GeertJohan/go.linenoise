@@ -5,22 +5,22 @@
  *
  * ------------------------------------------------------------------------
  *
- * Copyright (c) 2010, Salvatore Sanfilippo <antirez at gmail dot com>
- * Copyright (c) 2010, Pieter Noordhuis <pcnoordhuis at gmail dot com>
+ * Copyright (c) 2010-2014, Salvatore Sanfilippo <antirez at gmail dot com>
+ * Copyright (c) 2010-2013, Pieter Noordhuis <pcnoordhuis at gmail dot com>
  *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
  *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -37,6 +37,10 @@
 #ifndef __LINENOISE_H
 #define __LINENOISE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct linenoiseCompletions {
   size_t len;
   char **cvec;
@@ -44,14 +48,19 @@ typedef struct linenoiseCompletions {
 
 typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
 void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
-void linenoiseAddCompletion(linenoiseCompletions *, char *);
+void linenoiseAddCompletion(linenoiseCompletions *, const char *);
 
 char *linenoise(const char *prompt);
 int linenoiseHistoryAdd(const char *line);
 int linenoiseHistorySetMaxLen(int len);
-int linenoiseHistorySave(char *filename);
-int linenoiseHistoryLoad(char *filename);
+int linenoiseHistorySave(const char *filename);
+int linenoiseHistoryLoad(const char *filename);
 void linenoiseClearScreen(void);
 void linenoiseSetMultiLine(int ml);
+void linenoisePrintKeyCodes(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __LINENOISE_H */
