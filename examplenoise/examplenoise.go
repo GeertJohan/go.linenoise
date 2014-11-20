@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/GeertJohan/go.linenoise"
 	"os"
 	"strings"
+
+	"github.com/GeertJohan/go.linenoise"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 			if err == linenoise.KillSignalError {
 				quit()
 			}
-			fmt.Println("Unexpected error: %s", err)
+			fmt.Printf("Unexpected error: %s\n", err)
 			quit()
 		}
 		fields := strings.Fields(str)
