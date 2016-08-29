@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/GeertJohan/go.linenoise"
+	"github.com/essentialkaos/go.linenoise"
 )
 
 func main() {
