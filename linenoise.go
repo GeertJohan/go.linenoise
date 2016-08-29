@@ -26,9 +26,9 @@ import (
 
 // ///////////////////////////////////////////////////////////////////////////////// //
 
-// KillSignalError is returned returned by Line() when a user quits from prompt.
+// ErrKillSignal is returned returned by Line() when a user quits from prompt.
 // This occurs when the user enters ctrl+C or ctrl+D.
-var KillSignalError = errors.New("prompt was quited with a killsignal")
+var ErrKillSignal = errors.New("prompt was quited with a killsignal")
 
 // ///////////////////////////////////////////////////////////////////////////////// //
 
@@ -40,11 +40,13 @@ func init() {
 func Line(prompt string) (string, error) { // char *linenoise(const char *prompt);
 	promptCString := C.CString(prompt)
 	resultCString := C.linenoise(promptCString)
+
 	C.free(unsafe.Pointer(promptCString))
+
 	defer C.free(unsafe.Pointer(resultCString))
 
 	if resultCString == nil {
-		return "", KillSignalError
+		return "", ErrKillSignal
 	}
 
 	result := C.GoString(resultCString)
@@ -56,19 +58,24 @@ func Line(prompt string) (string, error) { // char *linenoise(const char *prompt
 func AddHistory(line string) error { // int linenoiseHistoryAdd(const char *line);
 	lineCString := C.CString(line)
 	res := C.linenoiseHistoryAdd(lineCString)
+
 	C.free(unsafe.Pointer(lineCString))
+
 	if res != 1 {
 		return errors.New("Could not add line to history.")
 	}
+
 	return nil
 }
 
 // SetHistoryCapacity changes the maximum length of history. Returns non-nil error on fail.
 func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(int len);
 	res := C.linenoiseHistorySetMaxLen(C.int(capacity))
+
 	if res != 1 {
 		return errors.New("Could not set history max len.")
 	}
+
 	return nil
 }
 
@@ -76,10 +83,13 @@ func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(i
 func SaveHistory(filename string) error { // int linenoiseHistorySave(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistorySave(filenameCString)
+
 	C.free(unsafe.Pointer(filenameCString))
+
 	if res != 0 {
 		return errors.New("Could not save history to file.")
 	}
+
 	return nil
 }
 
@@ -87,10 +97,13 @@ func SaveHistory(filename string) error { // int linenoiseHistorySave(char *file
 func LoadHistory(filename string) error { // int linenoiseHistoryLoad(char *filename);
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistoryLoad(filenameCString)
+
 	C.free(unsafe.Pointer(filenameCString))
+
 	if res != 0 {
 		return errors.New("Could not load history from file.")
 	}
+
 	return nil
 }
 
@@ -148,6 +161,7 @@ func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCo
 		for i, str := range completionsSlice {
 			cvecSlice[i] = C.CString(str)
 		}
+
 		completions.cvec = (**C.char)(cvec)
 	}
 }

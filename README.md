@@ -1,4 +1,4 @@
-# go-linenoise [![GoDoc](https://godoc.org/pkg.re/essentialkaos/go-linenoise?status.svg)](https://godoc.org/pkg.re/essentialkaos/go-linenoise) [![Go Report Card](https://goreportcard.com/badge/github.com/essentialkaos/go-linenoise)](https://goreportcard.com/report/github.com/essentialkaos/go-linenoise)
+# `go-linenoise` [![GoDoc](https://godoc.org/pkg.re/essentialkaos/go-linenoise?status.svg)](https://godoc.org/pkg.re/essentialkaos/go-linenoise) [![Go Report Card](https://goreportcard.com/badge/github.com/essentialkaos/go-linenoise)](https://goreportcard.com/report/github.com/essentialkaos/go-linenoise)
 
 go-linenoise is a [go](http://golang.org) package wrapping the [linenoise](https://github.com/antirez/linenoise) C library.
 
