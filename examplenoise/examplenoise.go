@@ -5,21 +5,27 @@ import (
 	"os"
 	"strings"
 
-	"github.com/essentialkaos/go.linenoise"
+	"github.com/essentialkaos/go-linenoise"
 )
 
 func main() {
 	fmt.Println("Welcome to go.linenoise example.")
+
 	writeHelp()
+
 	for {
 		str, err := linenoise.Line("prompt> ")
+
 		if err != nil {
 			if err == linenoise.KillSignalError {
 				quit()
 			}
+
 			fmt.Printf("Unexpected error: %s\n", err)
+
 			quit()
 		}
+
 		fields := strings.Fields(str)
 
 		// check if there is any valid input at all

@@ -1,12 +1,20 @@
-## go.linenoise
+## go-linenoise
 
-go.linenoise is a [go](http://golang.org) package wrapping the [linenoise](https://github.com/antirez/linenoise) C library.
+go-linenoise is a [go](http://golang.org) package wrapping the [linenoise](https://github.com/antirez/linenoise) C library.
 
 This package does not compile on windows.
 
-### Documentation
-Documentation can be found at [godoc.org/github.com/GeertJohan/go.linenoise](http://godoc.org/github.com/GeertJohan/go.linenoise).
-An example is located in the folder [examplenoise](examplenoise).
+### Instalation
+
+```
+go get pkg.re/essentialkaos/go-linenoise
+```
+
+For update to latest stable release, do:
+
+```
+go get -u pkg.re/essentialkaos/go-linenoise
+```
 
 ### License
 All code in this repository is licensed under a BSD license.
