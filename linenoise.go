@@ -16,7 +16,7 @@ package linenoise
 
 // #include <stdlib.h>
 // #include "linenoise.h"
-// #include "linenoiseCompletionCallbackHook.h"
+// #include "hooks.h"
 import "C"
 
 import (
@@ -28,12 +28,34 @@ import (
 
 // ErrKillSignal is returned returned by Line() when a user quits from prompt.
 // This occurs when the user enters ctrl+C or ctrl+D.
-var ErrKillSignal = errors.New("prompt was quited with a killsignal")
+var ErrKillSignal = errors.New("Prompt was quited with a kill signal")
+
+// CompletionHandler provides possible completions for given input
+type CompletionHandler func(input string) []string
+
+// HintHandler provides hint for user input
+type HintHandler func(input string) string
+
+// ///////////////////////////////////////////////////////////////////////////////// //
+
+// complHandler is completion handler function
+var complHandler = func(input string) []string {
+	return make([]string, 0)
+}
+
+// hintHandler is hint handler function
+var hintHandler = func(input string) string {
+	return ""
+}
+
+// hintColor contains hint color ANSI code (grey - 37 by default)
+var hintColor = 37
 
 // ///////////////////////////////////////////////////////////////////////////////// //
 
 func init() {
 	C.linenoiseSetupCompletionCallbackHook()
+	C.linenoiseSetupHintCallbackHook()
 }
 
 // Line displays given string and returns line from user input.
@@ -62,7 +84,7 @@ func AddHistory(line string) error { // int linenoiseHistoryAdd(const char *line
 	C.free(unsafe.Pointer(lineCString))
 
 	if res != 1 {
-		return errors.New("Could not add line to history.")
+		return errors.New("Could not add line to history")
 	}
 
 	return nil
@@ -73,7 +95,7 @@ func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(i
 	res := C.linenoiseHistorySetMaxLen(C.int(capacity))
 
 	if res != 1 {
-		return errors.New("Could not set history max len.")
+		return errors.New("Could not set history max len")
 	}
 
 	return nil
@@ -87,7 +109,7 @@ func SaveHistory(filename string) error { // int linenoiseHistorySave(char *file
 	C.free(unsafe.Pointer(filenameCString))
 
 	if res != 0 {
-		return errors.New("Could not save history to file.")
+		return errors.New("Could not save history to file")
 	}
 
 	return nil
@@ -101,7 +123,7 @@ func LoadHistory(filename string) error { // int linenoiseHistoryLoad(char *file
 	C.free(unsafe.Pointer(filenameCString))
 
 	if res != 0 {
-		return errors.New("Could not load history from file.")
+		return errors.New("Could not load history from file")
 	}
 
 	return nil
@@ -122,30 +144,35 @@ func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
 	}
 }
 
-// CompletionHandler provides possible completions for given input
-type CompletionHandler func(input string) []string
-
-// DefaultCompletionHandler simply returns an empty slice.
-var DefaultCompletionHandler = func(input string) []string {
-	return make([]string, 0)
+// SetCompletionHandler sets the CompletionHandler to be used for completion
+func SetCompletionHandler(h CompletionHandler) {
+	complHandler = h
 }
 
-var complHandler = DefaultCompletionHandler
+// SetHintHandler sets the HintHandler to be used for input hints
+func SetHintHandler(h HintHandler) {
+	hintHandler = h
+}
 
-// SetCompletionHandler sets the CompletionHandler to be used for completion
-func SetCompletionHandler(c CompletionHandler) {
-	complHandler = c
+// SetHintColor sets hint text color
+func SetHintColor(color int) {
+	if color < 31 {
+		hintColor = 31
+	} else if color > 37 {
+		hintColor = 37
+	}
+
+	hintColor = color
+}
+
+// PrintKeyCodes puts linenoise in key codes debugging mode.
+// Press keys and key combinations to see key codes. Type 'quit' at any time to exit.
+// PrintKeyCodes blocks until user enters 'quit'.
+func PrintKeyCodes() {
+	C.linenoisePrintKeyCodes()
 }
 
 // ///////////////////////////////////////////////////////////////////////////////// //
-
-// typedef struct linenoiseCompletions {
-//   size_t len;
-//   char **cvec;
-// } linenoiseCompletions;
-// typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
-// void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
-// void linenoiseAddCompletion(linenoiseCompletions *, char *);
 
 //export linenoiseGoCompletionCallbackHook
 func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCompletions) {
@@ -166,9 +193,16 @@ func linenoiseGoCompletionCallbackHook(input *C.char, completions *C.linenoiseCo
 	}
 }
 
-// PrintKeyCodes puts linenoise in key codes debugging mode.
-// Press keys and key combinations to see key codes. Type 'quit' at any time to exit.
-// PrintKeyCodes blocks until user enters 'quit'.
-func PrintKeyCodes() { // void linenoisePrintKeyCodes(void);
-	C.linenoisePrintKeyCodes()
+//export linenoiseGoHintCallbackHook
+func linenoiseGoHintCallbackHook(input *C.char, color *C.int, bold *C.int) *C.char {
+	hintText := hintHandler(C.GoString(input))
+
+	if hintText == "" {
+		return nil
+	}
+
+	*color = C.int(hintColor)
+	*bold = C.int(0)
+
+	return C.CString(hintText)
 }
