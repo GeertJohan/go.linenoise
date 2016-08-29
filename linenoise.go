@@ -40,7 +40,7 @@ type HintHandler func(input string) string
 
 // complHandler is completion handler function
 var complHandler = func(input string) []string {
-	return make([]string, 0)
+	return nil
 }
 
 // hintHandler is hint handler function
