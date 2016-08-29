@@ -1,6 +1,9 @@
+// +build !windows
+
+// go.linenoise is a go package wrapping the linenoise C library
 package linenoise
 
-// -windows
+// ///////////////////////////////////////////////////////////////////////////////// //
 
 // #include <stdlib.h>
 // #include "linenoise.h"
@@ -12,9 +15,13 @@ import (
 	"unsafe"
 )
 
+// ///////////////////////////////////////////////////////////////////////////////// //
+
 // KillSignalError is returned returned by Line() when a user quits from prompt.
 // This occurs when the user enters ctrl+C or ctrl+D.
 var KillSignalError = errors.New("prompt was quited with a killsignal")
+
+// ///////////////////////////////////////////////////////////////////////////////// //
 
 func init() {
 	C.linenoiseSetupCompletionCallbackHook()
@@ -107,6 +114,8 @@ var complHandler = DefaultCompletionHandler
 func SetCompletionHandler(c CompletionHandler) {
 	complHandler = c
 }
+
+// ///////////////////////////////////////////////////////////////////////////////// //
 
 // typedef struct linenoiseCompletions {
 //   size_t len;
