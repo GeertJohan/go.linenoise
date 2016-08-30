@@ -2,7 +2,7 @@
 
 // Package linenoise wraps the linenoise library (https://github.com/antirez/linenoise).
 //
-// The package is imported with "go." prefix
+// The package is imported with "go-" prefix
 // 	import "pkg.re/essentialkaos/go-linenoise"
 //
 // Simple readline usage:
