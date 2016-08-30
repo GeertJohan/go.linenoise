@@ -4,7 +4,7 @@ go-linenoise is a [go](http://golang.org) package wrapping the [linenoise](https
 
 This package does not compile on windows.
 
-## Instalation
+## Installation
 
 ```
 go get pkg.re/essentialkaos/go-linenoise.v2
