@@ -7,13 +7,13 @@ This package does not compile on windows.
 ## Instalation
 
 ```
-go get pkg.re/essentialkaos/go-linenoise
+go get pkg.re/essentialkaos/go-linenoise.v2
 ```
 
 For update to latest stable release, do:
 
 ```
-go get -u pkg.re/essentialkaos/go-linenoise
+go get -u pkg.re/essentialkaos/go-linenoise.v2
 ```
 
 ## License
