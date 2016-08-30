@@ -59,7 +59,7 @@ func init() {
 }
 
 // Line displays given string and returns line from user input.
-func Line(prompt string) (string, error) { // char *linenoise(const char *prompt);
+func Line(prompt string) (string, error) {
 	promptCString := C.CString(prompt)
 	resultCString := C.linenoise(promptCString)
 
@@ -77,7 +77,7 @@ func Line(prompt string) (string, error) { // char *linenoise(const char *prompt
 }
 
 // AddHistory adds a line to history. Returns non-nil error on fail.
-func AddHistory(line string) error { // int linenoiseHistoryAdd(const char *line);
+func AddHistory(line string) error {
 	lineCString := C.CString(line)
 	res := C.linenoiseHistoryAdd(lineCString)
 
@@ -91,7 +91,7 @@ func AddHistory(line string) error { // int linenoiseHistoryAdd(const char *line
 }
 
 // SetHistoryCapacity changes the maximum length of history. Returns non-nil error on fail.
-func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(int len);
+func SetHistoryCapacity(capacity int) error {
 	res := C.linenoiseHistorySetMaxLen(C.int(capacity))
 
 	if res != 1 {
@@ -102,7 +102,7 @@ func SetHistoryCapacity(capacity int) error { // int linenoiseHistorySetMaxLen(i
 }
 
 // SaveHistory saves from file with given filename. Returns non-nil error on fail.
-func SaveHistory(filename string) error { // int linenoiseHistorySave(char *filename);
+func SaveHistory(filename string) error {
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistorySave(filenameCString)
 
@@ -116,7 +116,7 @@ func SaveHistory(filename string) error { // int linenoiseHistorySave(char *file
 }
 
 // LoadHistory loads from file with given filename. Returns non-nil error on fail.
-func LoadHistory(filename string) error { // int linenoiseHistoryLoad(char *filename);
+func LoadHistory(filename string) error {
 	filenameCString := C.CString(filename)
 	res := C.linenoiseHistoryLoad(filenameCString)
 
@@ -136,7 +136,7 @@ func Clear() { // void linenoiseClearScreen(void);
 
 // SetMultiline sets linenoise to multiline or single line.
 // In multiline mode the user input will be wrapped to a new line when the length exceeds the amount of available rows in the terminal.
-func SetMultiline(ml bool) { // void linenoiseSetMultiLine(int ml);
+func SetMultiline(ml bool) {
 	if ml {
 		C.linenoiseSetMultiLine(1)
 	} else {
