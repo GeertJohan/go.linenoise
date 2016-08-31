@@ -48,8 +48,8 @@ var hintHandler = func(input string) string {
 	return ""
 }
 
-// hintColor contains hint color ANSI code (grey - 37 by default)
-var hintColor = 37
+// hintColor contains hint color ANSI code (dark grey by default)
+var hintColor = 90
 
 // ///////////////////////////////////////////////////////////////////////////////// //
 
@@ -156,10 +156,8 @@ func SetHintHandler(h HintHandler) {
 
 // SetHintColor sets hint text color
 func SetHintColor(color int) {
-	if color < 31 {
-		hintColor = 31
-	} else if color > 37 {
-		hintColor = 37
+	if color < 0 {
+		color = 0
 	}
 
 	hintColor = color
