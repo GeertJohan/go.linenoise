@@ -16,6 +16,13 @@ For update to latest stable release, do:
 go get -u pkg.re/essentialkaos/go-linenoise.v2
 ```
 
+## Build Status
+
+| Branch | Status |
+|------------|--------|
+| `master` | [![Build Status](https://travis-ci.org/essentialkaos/go-linenoise.svg?branch=master)](https://travis-ci.org/essentialkaos/go-linenoise) |
+| `develop` | [![Build Status](https://travis-ci.org/essentialkaos/go-linenoise.svg?branch=develop)](https://travis-ci.org/essentialkaos/go-linenoise) |
+
 ## License
 All code in this repository is licensed under a BSD license.
 This project wraps [linenoise](https://github.com/antirez/linenoise) which is written by Salvatore Sanfilippo and Pieter Noordhuis. The license for linenoise is included in the files `linenoise.c` and `linenoise.h`.
